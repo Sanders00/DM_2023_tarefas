@@ -1,50 +1,36 @@
 import 'package:flutter/material.dart';
 
-class OBNavigationButtons extends StatelessWidget {
+class NavigationButtons extends StatelessWidget {
   final int selectedPage;
   final PageController pageController;
 
-  const OBNavigationButtons(
+  const NavigationButtons(
       {super.key, required this.selectedPage, required this.pageController});
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (selectedPage > 0)
-          TextButton(
+          FloatingActionButton(
             onPressed: () => pageController.animateToPage(
               (selectedPage - 1),
               duration: const Duration(seconds: 1),
               curve: Curves.easeInOut,
             ),
-            child: const Text(
-              'Anterior',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            child: const Icon(Icons.arrow_back_rounded),
           ),
-        if (selectedPage == 0) const Spacer(),
+        //if (selectedPage == 0) const Spacer(),
         Visibility(
           visible: (selectedPage < 2),
-          child: TextButton(
+          child: FloatingActionButton(
             onPressed: () => pageController.animateToPage(
               (selectedPage + 1),
               duration: const Duration(seconds: 1),
               curve: Curves.easeIn,
             ),
-            child: const Text(
-              'Próximo',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            child: const Icon(Icons.arrow_forward_rounded),
           ),
         ),
       ],

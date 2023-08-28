@@ -29,7 +29,6 @@ class HomePage extends StatelessWidget {
         children: [
           Observer(builder: (_) {
             return PageView(
-              physics: const NeverScrollableScrollPhysics(),
               controller: _pageViewController,
               children: _pages,
               onPageChanged: (value) {
@@ -38,14 +37,15 @@ class HomePage extends StatelessWidget {
             );
           }),
           Column(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Observer(builder: (_) {
-                return OBDots(
+                return Indicators(
                     totalPages: _pages.length,
                     selectedPage: _homePageMobx.currentPage);
               }),
               Observer(builder: (_) {
-                return OBNavigationButtons(
+                return NavigationButtons(
                     selectedPage: _homePageMobx.currentPage,
                     pageController: _pageViewController);
               })

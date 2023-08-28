@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class OBDots extends StatelessWidget {
+class Indicators extends StatelessWidget {
   final int totalPages;
   final int selectedPage;
 
-  const OBDots(
+  const Indicators(
       {super.key, required this.totalPages, required this.selectedPage});
 
   @override
@@ -21,7 +21,7 @@ class OBDots extends StatelessWidget {
           height: selectedPage == index ? 12 : 6,
           duration: const Duration(microseconds: 200),
           decoration: BoxDecoration(
-            color: Colors.yellow,
+            color: Colors.blue,
             borderRadius: BorderRadius.circular(10),
           ),
         ),
