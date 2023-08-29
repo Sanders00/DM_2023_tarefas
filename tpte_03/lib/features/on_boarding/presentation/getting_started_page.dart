@@ -20,10 +20,10 @@ class OBGettingStartedPage extends StatelessWidget {
         ),
         TextButton(
             onPressed: () {
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const LoginPage(),
+                  builder: (context) => LoginPage(),
                 ),
               );
             },
