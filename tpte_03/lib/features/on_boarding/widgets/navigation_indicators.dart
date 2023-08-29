@@ -17,8 +17,8 @@ class Indicators extends StatelessWidget {
           margin: const EdgeInsets.only(
             right: 5,
           ),
-          width: selectedPage == index ? 40 : 20,
-          height: selectedPage == index ? 12 : 6,
+          width: 10,
+          height: selectedPage == index ? 20 : 6,
           duration: const Duration(microseconds: 200),
           decoration: BoxDecoration(
             color: Colors.blue,
