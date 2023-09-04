@@ -6,18 +6,34 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.brown,
-      appBar: AppBar(
-          backgroundColor: Colors.brown,
-          shadowColor: const Color.fromARGB(255, 255, 255, 176)),
-      body: const Center(
-        child: Column(
-          children: [],
-        ),
+      backgroundColor: const Color.fromARGB(255, 88, 59, 48),
+      body: const CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            backgroundColor:  Color.fromARGB(255, 88, 59, 48),
+            shadowColor:  Color.fromARGB(255, 255, 255, 176),
+            pinned: true,
+            expandedHeight: 150,
+            flexibleSpace: FlexibleSpaceBar(
+              title:  Text(
+                "Library of Babel",
+                style: TextStyle(
+                    fontSize: 21,
+                    color: Color.fromARGB(255, 255, 255, 176),
+                    shadows: [
+                      Shadow(
+                        blurRadius: 5,
+                        color: Color.fromARGB(255, 255, 255, 176),
+                      ),
+                    ]),
+              ),
+            ),
+          ),
+        ],
       ),
       bottomSheet: Container(
         decoration: const BoxDecoration(
-          color: Colors.brown,
+          color: Color.fromARGB(255, 88, 59, 48),
           boxShadow: <BoxShadow>[
             BoxShadow(
               color: Color.fromARGB(255, 255, 255, 176),
@@ -32,11 +48,13 @@ class HomePage extends StatelessWidget {
             style: const ButtonStyle(
               side: MaterialStatePropertyAll(BorderSide(
                   width: 2.0, color: Color.fromARGB(255, 255, 255, 176))),
-              backgroundColor: MaterialStatePropertyAll<Color>(Colors.brown),
+              backgroundColor: MaterialStatePropertyAll<Color>(
+                  Color.fromARGB(255, 88, 59, 48)),
             ),
             child: const Text(
               "add book",
-              style: TextStyle(color: Color.fromARGB(255, 255, 255, 176)),
+              style: TextStyle(
+                  color: Color.fromARGB(255, 255, 255, 176), fontSize: 20),
             ),
             onPressed: () {},
           ),
