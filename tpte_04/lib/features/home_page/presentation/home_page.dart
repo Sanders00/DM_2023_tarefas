@@ -6,59 +6,97 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 88, 59, 48),
-      body: const CustomScrollView(
+      body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            backgroundColor:  Color.fromARGB(255, 88, 59, 48),
-            shadowColor:  Color.fromARGB(255, 255, 255, 176),
+            stretch: true,
             pinned: true,
-            expandedHeight: 150,
-            flexibleSpace: FlexibleSpaceBar(
-              title:  Text(
-                "Library of Babel",
-                style: TextStyle(
-                    fontSize: 21,
-                    color: Color.fromARGB(255, 255, 255, 176),
-                    shadows: [
-                      Shadow(
-                        blurRadius: 5,
-                        color: Color.fromARGB(255, 255, 255, 176),
+            centerTitle: true,
+            toolbarHeight: 100.0 + kToolbarHeight,
+            title: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      icon: const Icon(
+                        Icons.menu,
+                        color: Colors.white,
                       ),
-                    ]),
+                      onPressed: () {},
+                    ),
+                    const Text('Library of Babel'),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.notifications,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 12.0,
+                    bottom: 12.0,
+                    left: 8.0,
+                    right: 8.0,
+                  ),
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5.0)),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        labelText: "Search Books...",
+                        border: InputBorder.none,
+                        icon: IconButton(
+                            onPressed: () {}, icon: const Icon(Icons.search)),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                color: Colors.yellow,
+                height: 400,
               ),
             ),
           ),
-        ],
-      ),
-      bottomSheet: Container(
-        decoration: const BoxDecoration(
-          color: Color.fromARGB(255, 88, 59, 48),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: Color.fromARGB(255, 255, 255, 176),
-              blurRadius: 15.0,
-              spreadRadius: 10.0,
-            )
-          ],
-        ),
-        height: MediaQuery.of(context).size.height * 0.1,
-        child: Center(
-          child: ElevatedButton(
-            style: const ButtonStyle(
-              side: MaterialStatePropertyAll(BorderSide(
-                  width: 2.0, color: Color.fromARGB(255, 255, 255, 176))),
-              backgroundColor: MaterialStatePropertyAll<Color>(
-                  Color.fromARGB(255, 88, 59, 48)),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                color: Colors.yellow,
+                height: 400,
+              ),
             ),
-            child: const Text(
-              "add book",
-              style: TextStyle(
-                  color: Color.fromARGB(255, 255, 255, 176), fontSize: 20),
-            ),
-            onPressed: () {},
           ),
-        ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                color: Colors.yellow,
+                height: 400,
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                color: Colors.yellow,
+                height: 400,
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
