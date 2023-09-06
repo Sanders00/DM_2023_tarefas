@@ -19,22 +19,47 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _genreController = TextEditingController();
   final TextEditingController _yearController = TextEditingController();
 
+  bool filterByTitle = true;
+
+  late Future<List<TbBookData>> _foundBooks;
+
   @override
   void initState() {
     _appDb = AppDb();
+    _foundBooks = _appDb.getBooks();
     super.initState();
+  }
+
+  void runFilter(String keyValue) {
+    List<TbBookData> result = [];
+    if (keyValue.isEmpty) {
+      result = _foundBooks;
+    } else {
+      result = _foundBooks
+          .where((book) =>
+              book.title.toLowerCase().contains(keyValue.toLowerCase()))
+          .toList();
+    }
+
+    setState(() {
+      _foundBooks = result;
+    });
   }
 
   @override
   void dispose() {
     _appDb.close();
+    _titleController.dispose();
+    _authorController.dispose();
+    _genreController.dispose();
+    _yearController.dispose();
     super.dispose();
   }
 
   refresh() {
     setState(() {});
   }
-  
+
   addDialog() {
     return showDialog(
         context: context,
@@ -101,7 +126,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 100 + kToolbarHeight,
+        toolbarHeight: 120 + kToolbarHeight,
         centerTitle: true,
         title: Column(
           children: [
@@ -123,6 +148,42 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
+            Row(
+              children: [
+                const Text(
+                  "Filter by:",
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+                Expanded(
+                  child: CheckboxListTile(
+                      controlAffinity: ListTileControlAffinity.leading,
+                      title: const Text(
+                        "Title",
+                        style: TextStyle(fontSize: 15, color: Colors.white),
+                      ),
+                      value: filterByTitle,
+                      onChanged: (value) {
+                        setState(() {
+                          filterByTitle = value!;
+                        });
+                      }),
+                ),
+                Expanded(
+                  child: CheckboxListTile(
+                      controlAffinity: ListTileControlAffinity.leading,
+                      title: const Text(
+                        "Author",
+                        style: TextStyle(fontSize: 15, color: Colors.white),
+                      ),
+                      value: !filterByTitle,
+                      onChanged: (value) {
+                        setState(() {
+                          filterByTitle = !value!;
+                        });
+                      }),
+                )
+              ],
+            ),
             Padding(
               padding: const EdgeInsets.only(
                 top: 12.0,
@@ -136,8 +197,10 @@ class _HomePageState extends State<HomePage> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(5.0)),
                 child: TextField(
+                  onChanged: (value) => runFilter(value),
                   decoration: InputDecoration(
-                    labelText: "Search Books...",
+                    labelText:
+                        "Search Books by ${filterByTitle ? "title" : "author"}...",
                     border: InputBorder.none,
                     icon: IconButton(
                         onPressed: () {}, icon: const Icon(Icons.search)),
@@ -166,10 +229,11 @@ class _HomePageState extends State<HomePage> {
             if (books != null) {
               return ListView.builder(
                   padding: const EdgeInsets.all(8.0),
-                  itemCount: books.length,
+                  itemCount: _foundBooks.length,
                   itemBuilder: (context, index) {
-                    final book = books[index];
+                    final book = _foundBooks[index];
                     return CustomCard(
+                      context: context,
                       notify: refresh,
                       appDb: _appDb,
                       book: book,
