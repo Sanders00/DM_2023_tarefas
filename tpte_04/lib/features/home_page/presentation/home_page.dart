@@ -18,32 +18,14 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _authorController = TextEditingController();
   final TextEditingController _genreController = TextEditingController();
   final TextEditingController _yearController = TextEditingController();
+  final TextEditingController _filterController = TextEditingController();
 
   bool filterByTitle = true;
-
-  late Future<List<TbBookData>> _foundBooks;
 
   @override
   void initState() {
     _appDb = AppDb();
-    _foundBooks = _appDb.getBooks();
     super.initState();
-  }
-
-  void runFilter(String keyValue) {
-    List<TbBookData> result = [];
-    if (keyValue.isEmpty) {
-      result = _foundBooks;
-    } else {
-      result = _foundBooks
-          .where((book) =>
-              book.title.toLowerCase().contains(keyValue.toLowerCase()))
-          .toList();
-    }
-
-    setState(() {
-      _foundBooks = result;
-    });
   }
 
   @override
@@ -197,7 +179,9 @@ class _HomePageState extends State<HomePage> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(5.0)),
                 child: TextField(
-                  onChanged: (value) => runFilter(value),
+                  onChanged: (value) => setState(() {
+                    _filterController.text = value;
+                  }),
                   decoration: InputDecoration(
                     labelText:
                         "Search Books by ${filterByTitle ? "title" : "author"}...",
@@ -229,15 +213,34 @@ class _HomePageState extends State<HomePage> {
             if (books != null) {
               return ListView.builder(
                   padding: const EdgeInsets.all(8.0),
-                  itemCount: _foundBooks.length,
+                  itemCount: books.length,
                   itemBuilder: (context, index) {
-                    final book = _foundBooks[index];
-                    return CustomCard(
-                      context: context,
-                      notify: refresh,
-                      appDb: _appDb,
-                      book: book,
-                    );
+                    final book = books[index];
+                    if (filterByTitle) {
+                      if (book.title
+                          .toLowerCase()
+                          .contains(_filterController.text.toLowerCase())) {
+                        return CustomCard(
+                          context: context,
+                          notify: refresh,
+                          appDb: _appDb,
+                          book: book,
+                        );
+                      }
+                    } else {
+                      if (book.author
+                          .toLowerCase()
+                          .contains(_filterController.text.toLowerCase())) {
+                        return CustomCard(
+                          context: context,
+                          notify: refresh,
+                          appDb: _appDb,
+                          book: book,
+                        );
+                      }
+                    }
+
+                    return const SizedBox();
                   });
             }
             return const Text('No Data Found');

@@ -76,6 +76,7 @@ class CustomCard extends StatelessWidget {
                     _authorController.text = '';
                     _genreController.text = '';
                     _yearController.text = '';
+                    notify();
                   },
                   child: const Text('Update')),
             ],
@@ -125,7 +126,7 @@ class CustomCard extends StatelessWidget {
         onTap: () {},
         child: Center(
             child: SizedBox(
-          height: 350,
+          height: 400,
           width: double.infinity,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -138,13 +139,16 @@ class CustomCard extends StatelessWidget {
                       fontSize: 25, fontWeight: FontWeight.bold),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  book.genre,
-                  style: const TextStyle(
-                      fontSize: 16, fontStyle: FontStyle.italic),
-                ),
+              Text(
+                book.genre,
+                style:
+                    const TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+              ),
+              SizedBox(
+                width: double.infinity,
+                height: 200,
+                child: Image.asset("assets/livroplaceholder.png",
+                    fit: BoxFit.cover),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
