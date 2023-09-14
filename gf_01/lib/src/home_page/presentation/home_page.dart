@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:gf_01/src/adicionais/presentation/adicionais_page.dart';
+import 'package:gf_01/src/database/models/hospede.dart';
+import 'package:gf_01/src/database/models/reservas.dart';
+import 'package:gf_01/src/funcionario/presentation/funcionario_page.dart';
+import 'package:gf_01/src/hospedes/presentation/hospedes_page.dart';
 import 'package:gf_01/src/quartos/presentation/quartos_page.dart';
+import 'package:gf_01/src/reservas/presentation/reservas_page.dart';
 
+import '../../database/models/quarto.dart';
 import '../../settings/controllers/settings_controller.dart';
 import '../../settings/presentation/settings_view.dart';
 
@@ -10,23 +17,36 @@ class HomeScreen extends StatefulWidget {
   final SettingsController settingsController;
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  //final dbHelper = DatabaseHelper(); // Classe para gerenciar o banco de dados
-  //final prefs = SharedPreferencesHelper(); // Classe para gerenciar SharedPreferences
-  //final notifications = NotificationsHelper(); // Classe para gerenciar notificações
+  final quartosDB = QuartoDB();
+  final hospedeDB = HospedeDB();
+  final reservasDB = ReservaDB();
 
-  int totalRooms = 50; // Total de quartos no hotel
-  int availableRooms = 30; // Total de quartos disponíveis
-  int totalReservations = 20; // Total de reservas atuais
-  int checkedInGuests = 15; // Total de hóspedes que fizeram o check-in
+  late int todosquartos = 0;
+  late int availableRooms = 0; // Total de quartos disponíveis
+  late int totalReservations = 0;
+  late int totalHospedes = 0;
 
   @override
-  void initState() {
+  initState() {
+    _loadInfo();
     super.initState();
-    // Configurar notificações aqui
+  }
+
+  Future<void> _loadInfo() async {
+    final reservas = await reservasDB.getAllReservas();
+    final hospedes = await hospedeDB.getAllHospedes();
+    final quartos = await quartosDB.getAllQuartos();
+    final quartosDisponiveis = await quartosDB.getAllQuartosDisponiveis();
+    setState(() {
+      totalHospedes = hospedes.length;
+      todosquartos = quartos.length;
+      totalReservations = reservas.length;
+      availableRooms = quartosDisponiveis.length;
+    });
   }
 
   @override
@@ -34,6 +54,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Hotel Management App'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {});
+              },
+              icon: const Icon(Icons.replay_outlined))
+        ],
       ),
       body: Center(
         child: Column(
@@ -47,10 +74,10 @@ class _HomeScreenState extends State<HomeScreen> {
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildInfoCard('Quartos', totalRooms.toString()),
+                _buildInfoCard('Quartos', "$todosquartos"),
                 _buildInfoCard('Disponíveis', availableRooms.toString()),
-                _buildInfoCard('Reservas', totalReservations.toString()),
-                _buildInfoCard('Check-in', checkedInGuests.toString()),
+                _buildInfoCard('Reservas', "$totalReservations"),
+                _buildInfoCard('Check-in', "$totalHospedes"),
               ],
             ),
           ],
@@ -94,13 +121,45 @@ class _HomeScreenState extends State<HomeScreen> {
             ListTile(
               title: const Text('Hóspedes'),
               onTap: () {
-                // Navegar para a tela de gerenciamento de hóspedes
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HospedePage(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Funcionarios'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const FuncionarioPage(),
+                  ),
+                );
               },
             ),
             ListTile(
               title: const Text('Reservas'),
               onTap: () {
-                // Navegar para a tela de gerenciamento de reservas
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ReservasPage(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Adicionais'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AdicionaisPage(),
+                  ),
+                );
               },
             ),
             ListTile(

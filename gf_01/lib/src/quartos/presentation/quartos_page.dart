@@ -12,25 +12,244 @@ class QuartoPage extends StatefulWidget {
 class _QuartoPageState extends State<QuartoPage> {
   final quartosDB = QuartoDB();
 
-  final quartoteste = Quarto(
-    numeroQuarto: '101',
-    tipo: 'Luxo',
-    status: 'Disponível',
-    precoPorNoite: 250.0,
-  );
+  final TextEditingController _numeroController = TextEditingController();
+  final TextEditingController _precoController = TextEditingController();
+
+  var _status = 'Disponivel';
+  var _tipo = "Simples";
+
+  refresh() {
+    setState(() {});
+  }
+
+  updateDialog() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              title: const Text("Update quarto"),
+              content: Column(
+                children: [
+                  TextFormField(
+                    controller: _numeroController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      label: Text("Numero do quarto:"),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const Text("Tipo do quarto: "),
+                      DropdownButton(
+                        value: _tipo,
+                        onChanged: (value) {
+                          setState(() {
+                            _tipo = value!;
+                          });
+                        },
+                        items: const [
+                          DropdownMenuItem(
+                            value: "Simples",
+                            child: Text('Simples'),
+                          ),
+                          DropdownMenuItem(
+                            value: "Luxo",
+                            child: Text('Luxo'),
+                          ),
+                          DropdownMenuItem(
+                            value: "Suíte",
+                            child: Text('Suíte'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const Text("Status: "),
+                      DropdownButton(
+                        value: _status,
+                        onChanged: (value) {
+                          setState(
+                            () {
+                              _status = value!;
+                            },
+                          );
+                        },
+                        items: const [
+                          DropdownMenuItem(
+                            value: "Disponivel",
+                            child: Text('Disponivel'),
+                          ),
+                          DropdownMenuItem(
+                            value: "Ocupado",
+                            child: Text('Ocupado'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  TextFormField(
+                    controller: _precoController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      label: Text("Preço Estadia:"),
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text("Cancel")),
+                TextButton(
+                  onPressed: () {
+                    final quarto = Quarto(
+                      numeroQuarto: _numeroController.text,
+                      tipo: _tipo,
+                      status: _status,
+                      precoPorNoite: double.parse(_precoController.text),
+                    );
+                    quartosDB.updateQuarto(quarto);
+                    _numeroController.clear();
+                    _status = 'Disponivel';
+                    _precoController.clear();
+                    Navigator.pop(context);
+                    refresh();
+                  },
+                  child: const Text('Update'),
+                ),
+              ],
+            );
+          });
+        });
+  }
+
+  addDialog() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              title: const Text("Adicionar quarto"),
+              content: Column(
+                children: [
+                  TextFormField(
+                    controller: _numeroController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      label: Text("Numero do quarto:"),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const Text("Tipo do quarto: "),
+                      DropdownButton(
+                        value: _tipo,
+                        onChanged: (value) {
+                          setState(() {
+                            _tipo = value!;
+                          });
+                        },
+                        items: const [
+                          DropdownMenuItem(
+                            value: "Simples",
+                            child: Text('Simples'),
+                          ),
+                          DropdownMenuItem(
+                            value: "Luxo",
+                            child: Text('Luxo'),
+                          ),
+                          DropdownMenuItem(
+                            value: "Suíte",
+                            child: Text('Suíte'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const Text("Status: "),
+                      DropdownButton(
+                        value: _status,
+                        onChanged: (value) {
+                          setState(
+                            () {
+                              _status = value!;
+                            },
+                          );
+                        },
+                        items: const [
+                          DropdownMenuItem(
+                            value: "Disponivel",
+                            child: Text('Disponivel'),
+                          ),
+                          DropdownMenuItem(
+                            value: "Ocupado",
+                            child: Text('Ocupado'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  TextFormField(
+                    controller: _precoController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      label: Text("Preço Estadia:"),
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text("Cancel")),
+                TextButton(
+                  onPressed: () {
+                    final quarto = Quarto(
+                      numeroQuarto: _numeroController.text,
+                      tipo: _tipo,
+                      status: _status,
+                      precoPorNoite: double.parse(_precoController.text),
+                    );
+                    quartosDB.insertQuarto(quarto);
+                    _numeroController.clear();
+                    _status = 'Disponivel';
+                    _precoController.clear();
+                    Navigator.pop(context);
+                    refresh();
+                  },
+                  child: const Text('Create'),
+                ),
+              ],
+            );
+          });
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: const Text("Quartos"),
         actions: [
           ElevatedButton(
               onPressed: () {
-                setState(() {
-                  quartosDB.insertQuarto(quartoteste);
-                });
+                addDialog();
+                setState(() {});
               },
-              child: Text("+")),
+              child: const Icon(Icons.add)),
         ],
       ),
       body: Center(
@@ -65,16 +284,28 @@ class _QuartoPageState extends State<QuartoPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(quarto.numeroQuarto),
-            Text(quarto.tipo),
-            Text(quarto.status),
+            Column(
+              children: [
+                Text(quarto.tipo),
+                Text(quarto.status),
+              ],
+            ),
             Text(quarto.precoPorNoite.toString()),
             ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    quartosDB.deleteQuarto(quarto.id!);
-                  });
-                },
-                child: const Icon(Icons.delete))
+              onPressed: () {
+                updateDialog();
+                setState(() {});
+              },
+              child: const Icon(Icons.edit),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  quartosDB.deleteQuarto(quarto.id!);
+                });
+              },
+              child: const Icon(Icons.delete),
+            ),
           ],
         ),
       ),

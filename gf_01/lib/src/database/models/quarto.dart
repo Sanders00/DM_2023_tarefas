@@ -24,6 +24,15 @@ class QuartoDB {
     final db = await HotelDatabase().database;
     return await db.delete('quartos', where: 'id = ?', whereArgs: [id]);
   }
+
+  Future<List<Quarto>> getAllQuartosDisponiveis() async {
+    final db = await HotelDatabase().database;
+    final List<Map<String, dynamic>> maps =
+        await db.rawQuery("SELECT * FROM quartos WHERE status = 'Disponivel'");
+    return List.generate(maps.length, (i) {
+      return Quarto.fromMap(maps[i]);
+    });
+  }
 }
 
 class Quarto {
